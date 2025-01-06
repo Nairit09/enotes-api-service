@@ -9,7 +9,7 @@ import com.becoder.entity.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
-	Optional<Category> findByIdAndIsDeletedFalse(Integer id);
+	Optional<Category> findByIdAndIsDeletedFalse(Integer id) throws Exception;
 
 	List<Category> findByIsDeletedFalse();
 

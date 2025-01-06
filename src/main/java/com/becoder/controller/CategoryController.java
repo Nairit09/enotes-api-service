@@ -21,8 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.becoder.dto.CategoryDto;
 import com.becoder.dto.CategoryResponse;
 import com.becoder.entity.Category;
+import com.becoder.exception.ResourceNotFoundException;
 import com.becoder.service.CategoryService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/category")
 public class CategoryController {
@@ -68,12 +72,20 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) {
-		CategoryDto categoryDto = categoryService.getCategoryById(id);
-		if (ObjectUtils.isEmpty(categoryDto)) {
-			return new ResponseEntity<>("Category not found with Id=" + id, HttpStatus.NOT_FOUND);
+	public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception {
+		try {
+			CategoryDto categoryDto = categoryService.getCategoryById(id);
+			if (ObjectUtils.isEmpty(categoryDto)) {
+				return new ResponseEntity<>("Category not found with Id=" + id, HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<>(categoryDto, HttpStatus.OK);
+		} catch (ResourceNotFoundException e) {
+			log.error("Controller :: getCategoryDeatilsById ::", e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(categoryDto, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
