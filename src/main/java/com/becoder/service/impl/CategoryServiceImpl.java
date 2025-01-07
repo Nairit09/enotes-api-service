@@ -15,6 +15,7 @@ import com.becoder.entity.Category;
 import com.becoder.exception.ResourceNotFoundException;
 import com.becoder.repository.CategoryRepository;
 import com.becoder.service.CategoryService;
+import com.becoder.util.Validation;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,14 +29,19 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private ModelMapper mapper;
 
+	@Autowired
+	private Validation validation;
+
 	@Override
 	public Boolean saveCategory(CategoryDto categoryDto) {
+
+		// Validation Checking
+		validation.categoryValidation(categoryDto);
+
 		Category category = mapper.map(categoryDto, Category.class);
 
 		if (ObjectUtils.isEmpty(category.getId())) {
-			category.setName(categoryDto.getName());
-			category.setDescription(categoryDto.getDescription());
-			category.setIsActive(categoryDto.getIsActive());
+//			category.setIsActive(categoryDto.getIsActive());
 			category.setCreatedBy(0);
 			category.setCreatedOn(new Date());
 
@@ -79,10 +85,10 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public CategoryDto getCategoryById(Integer id)throws Exception{
+	public CategoryDto getCategoryById(Integer id) throws Exception {
 
 		Category category = categoryRepo.findByIdAndIsDeletedFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Category not found with id=" +id));
+				.orElseThrow(() -> new ResourceNotFoundException("Category not found with id=" + id));
 		if (!ObjectUtils.isEmpty(category)) {
 			return mapper.map(category, CategoryDto.class);
 
