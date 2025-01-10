@@ -20,6 +20,7 @@ import com.becoder.dto.CategoryDto;
 import com.becoder.dto.CategoryResponse;
 import com.becoder.exception.ResourceNotFoundException;
 import com.becoder.service.CategoryService;
+import com.becoder.util.CommonUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,9 +39,9 @@ public class CategoryController {
 		category.setIsDeleted(false);
 		Boolean saveCategory = categoryService.saveCategory(category);
 		if (saveCategory) {
-			return new ResponseEntity<>("saved success", HttpStatus.CREATED);
+			return CommonUtil.createBuildResponseMessage("saved success", HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<>("not saved", HttpStatus.INTERNAL_SERVER_ERROR);
+			return CommonUtil.createErrorResponseMessage("Category Not saved", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
