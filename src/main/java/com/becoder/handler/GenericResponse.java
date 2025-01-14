@@ -31,8 +31,8 @@ public class GenericResponse {
 	public ResponseEntity<?> create() {
 
 		Map<String, Object> map = new LinkedHashMap<>();
-		map.put(status, status);
-		map.put(message, message);
+		map.put("status", status);
+		map.put("message", message);
 
 		if (!ObjectUtils.isEmpty(map)) {
 			map.put("data", data);
