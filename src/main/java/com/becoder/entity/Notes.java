@@ -4,6 +4,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,7 +33,7 @@ public class Notes extends BaseModel {
 	@ManyToOne
 	private Category category;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private FileDetails fileDetails;
 
 }

@@ -3,6 +3,7 @@ package com.becoder.dto;
 import java.util.Date;
 
 import com.becoder.entity.Category;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class NotesDto {
 
 	private Date updatedOn;
 
+	@JsonAlias({"fileDetails", "fileDtls"})
 	private FilesDto fileDtls;
 
 	@Getter
