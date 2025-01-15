@@ -29,11 +29,11 @@ public class Notes extends BaseModel {
 	private String title;
 
 	private String description;
-
+	
 	@ManyToOne
 	private Category category;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	private FileDetails fileDetails;
 
 }

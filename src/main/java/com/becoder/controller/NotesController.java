@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.becoder.dto.NotesDto;
+import com.becoder.dto.NotesResponse;
 import com.becoder.entity.FileDetails;
 import com.becoder.service.NotesService;
 import com.becoder.util.CommonUtil;
@@ -66,4 +68,13 @@ public class NotesController {
 		}
 		return CommonUtil.createBuildResponse(allNotes, HttpStatus.OK);
 	}
+
+	@GetMapping("/user-notes")
+	public ResponseEntity<?> getAllNotesByUser(@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+		Integer userId = 1;
+		NotesResponse allNotes = notesService.getAllNotesByUser( userId,pageNo, pageSize);
+		return CommonUtil.createBuildResponse(allNotes, HttpStatus.OK);
+	}
+
 }

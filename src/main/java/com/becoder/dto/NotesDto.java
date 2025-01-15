@@ -57,6 +57,6 @@ public class NotesDto {
 
 		private Integer id;
 
-		private String title;
+		private String name;
 	}
 }
