@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.becoder.dto.NotesDto;
 import com.becoder.dto.NotesDto.CategoryDto;
+import com.becoder.dto.NotesDto.FilesDto;
 import com.becoder.dto.NotesResponse;
 import com.becoder.entity.FileDetails;
 import com.becoder.entity.Notes;
@@ -62,6 +63,11 @@ public class NotesServiceImpl implements NotesService {
 		ObjectMapper ob = new ObjectMapper();
 		NotesDto notesDto = ob.readValue(notes, NotesDto.class);
 
+		// update notes if id is given in request
+		if (!ObjectUtils.isEmpty(notesDto.getId())) {
+			updateNotes(notesDto, file);
+		}
+
 		// validation notes
 		checkCategoryExist(notesDto.getCategory());
 
@@ -72,7 +78,9 @@ public class NotesServiceImpl implements NotesService {
 		if (!ObjectUtils.isEmpty(filedetails)) {
 			notesMap.setFileDetails(filedetails);
 		} else {
-			notesMap.setFileDetails(null);
+			if (ObjectUtils.isEmpty(notesDto.getId())) {
+				notesMap.setFileDetails(null);
+			}
 		}
 
 		Notes saveNotes = notesRepo.save(notesMap);
@@ -80,6 +88,22 @@ public class NotesServiceImpl implements NotesService {
 			return true;
 		}
 		return false;
+	}
+
+	private void updateNotes(NotesDto notesDto, MultipartFile file) throws Exception {
+
+		Notes existNotes = notesRepo.findById(notesDto.getId())
+				.orElseThrow(() -> new ResourceNotFoundException("Invalid Notes id"));
+		notesDto.setCreatedBy(existNotes.getCreatedBy());
+		notesDto.setCreatedOn(existNotes.getCreatedOn());
+
+		notesDto.setUpdatedBy(1);
+		// user not choose any file at update time
+		if (ObjectUtils.isEmpty(file)) {
+			notesDto.setFileDtls(mapper.map(existNotes.getFileDetails(), FilesDto.class));
+
+		}
+
 	}
 
 	private FileDetails saveFileDetails(MultipartFile file) throws IOException {

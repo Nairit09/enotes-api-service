@@ -32,7 +32,7 @@ public class NotesDto {
 
 	private Date updatedOn;
 
-	@JsonAlias({"fileDetails", "fileDtls"})
+	@JsonAlias({ "fileDetails", "fileDtls" })
 	private FilesDto fileDtls;
 
 	@Getter
