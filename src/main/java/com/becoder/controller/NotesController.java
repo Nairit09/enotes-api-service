@@ -2,6 +2,7 @@ package com.becoder.controller;
 
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.HttpHeaders;
@@ -73,8 +74,32 @@ public class NotesController {
 	public ResponseEntity<?> getAllNotesByUser(@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 		Integer userId = 1;
-		NotesResponse allNotes = notesService.getAllNotesByUser( userId,pageNo, pageSize);
+		NotesResponse allNotes = notesService.getAllNotesByUser(userId, pageNo, pageSize);
 		return CommonUtil.createBuildResponse(allNotes, HttpStatus.OK);
 	}
 
+	@GetMapping("/delete/{id}")
+	public ResponseEntity<?> deleteNotes(@PathVariable Integer id) throws Throwable {
+		notesService.softDeleteNotes(id);
+		return CommonUtil.createBuildResponseMessage("Delete Success", HttpStatus.OK);
+
+	}
+
+	@GetMapping("/restore/{id}")
+	public ResponseEntity<?> restoreNotes(@PathVariable Integer id) throws Throwable {
+		notesService.restoreNotes(id);
+		return CommonUtil.createBuildResponseMessage("Restored Succesfully", HttpStatus.OK);
+
+	}
+
+	@GetMapping("/recycle-bin")
+	public ResponseEntity<?> getUserRecycleBinNotes() throws Throwable {
+		Integer userId = 1;
+		List<NotesDto> notes = notesService.getUserRecycleBinNotes(userId);
+		if (CollectionUtils.isEmpty(notes)) {
+			return CommonUtil.createBuildResponseMessage("Notes not available in Recycle Bin", HttpStatus.OK);
+		}
+		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+
+	}
 }

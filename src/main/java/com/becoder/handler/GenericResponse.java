@@ -34,7 +34,7 @@ public class GenericResponse {
 		map.put("status", status);
 		map.put("message", message);
 
-		if (!ObjectUtils.isEmpty(map)) {
+		if (!ObjectUtils.isEmpty(data)) {
 			map.put("data", data);
 
 		}

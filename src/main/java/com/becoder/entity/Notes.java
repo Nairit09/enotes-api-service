@@ -1,5 +1,7 @@
 package com.becoder.entity;
 
+import java.util.Date;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Entity;
@@ -29,11 +31,15 @@ public class Notes extends BaseModel {
 	private String title;
 
 	private String description;
-	
+
 	@ManyToOne
 	private Category category;
 
 	@ManyToOne
 	private FileDetails fileDetails;
+
+	private Boolean isDeleted;
+
+	private Date deletedOn;
 
 }

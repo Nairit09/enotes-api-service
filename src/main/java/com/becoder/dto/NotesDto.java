@@ -32,6 +32,10 @@ public class NotesDto {
 
 	private Date updatedOn;
 
+	private Boolean isDeleted;
+
+	private Date deletedOn;
+
 	@JsonAlias({ "fileDetails", "fileDtls" })
 	private FilesDto fileDtls;
 
