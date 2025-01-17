@@ -1,8 +1,8 @@
 package com.becoder.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-import com.becoder.entity.Category;
 import com.fasterxml.jackson.annotation.JsonAlias;
 
 import lombok.AllArgsConstructor;
@@ -34,7 +34,7 @@ public class NotesDto {
 
 	private Boolean isDeleted;
 
-	private Date deletedOn;
+	private LocalDate deletedOn;
 
 	@JsonAlias({ "fileDetails", "fileDtls" })
 	private FilesDto fileDtls;
