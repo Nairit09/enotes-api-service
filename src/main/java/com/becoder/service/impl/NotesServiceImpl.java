@@ -303,4 +303,19 @@ public class NotesServiceImpl implements NotesService {
 		return favouriteNoteList;
 	}
 
+	@Override
+	public Boolean copyNotes(Integer id) throws Exception {
+		Notes notes = notesRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Notes id invalid ! Not Found"));
+
+		Notes copyNote = Notes.builder().title(notes.getTitle()).description(notes.getDescription())
+				.category(notes.getCategory()).isDeleted(false).fileDetails(null).build();
+
+		Notes saveCopyNotes = notesRepo.save(copyNote);
+		if (!ObjectUtils.isEmpty(saveCopyNotes)) {
+			return true;
+		}
+		return false;
+	}
+
 }
