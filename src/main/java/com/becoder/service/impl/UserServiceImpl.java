@@ -23,6 +23,7 @@ import com.becoder.entity.User;
 import com.becoder.repository.RoleRepository;
 import com.becoder.repository.UserRepository;
 import com.becoder.service.EmailService;
+import com.becoder.service.JwtService;
 import com.becoder.service.UserService;
 import com.becoder.util.Validation;
 
@@ -49,6 +50,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+
+	@Autowired
+	private JwtService jwtService;
 
 	@Override
 	public Boolean register(UserDto userDto, String url) throws Exception {
@@ -101,7 +105,7 @@ public class UserServiceImpl implements UserService {
 		if (authenticate.isAuthenticated()) {
 			CustomUserDetails customUserDetails = (CustomUserDetails) authenticate.getPrincipal();
 
-			String token = "safdghhfdssaghnggsdsgfvswaefqwaef";
+			String token = jwtService.generateToken(customUserDetails.getUser());
 
 			LoginResponse loginResponse = LoginResponse.builder()
 					.user(mapper.map(customUserDetails.getUser(), UserDto.class)).token(token).build();
