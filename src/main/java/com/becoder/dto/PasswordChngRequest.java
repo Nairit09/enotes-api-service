@@ -2,21 +2,18 @@ package com.becoder.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
-public class LoginResponse {
+public class PasswordChngRequest {
 
-	private UserResponse user;
+	private String oldPassword;
 
-	private String token;
-
+	private String newPassword;
 }
