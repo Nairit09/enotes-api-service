@@ -3,7 +3,10 @@ package com.becoder.util;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.becoder.config.security.CustomUserDetails;
+import com.becoder.entity.User;
 import com.becoder.handler.GenericResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,10 +70,18 @@ public class CommonUtil {
 			return "application/octet-stream";
 		}
 	}
+
 	public static String getUrl(HttpServletRequest request) {
 		String apiUrl = request.getRequestURL().toString(); // http:localhost:8080/api/v1/auth
-		apiUrl=apiUrl.replace(request.getServletPath(),""); // http:localhost:8080
+		apiUrl = apiUrl.replace(request.getServletPath(), ""); // http:localhost:8080
 		return apiUrl;
 	}
 
+	public static User getLoggedInUser() {
+
+		CustomUserDetails logUser = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		return logUser.getUser();
+
+	}
 }

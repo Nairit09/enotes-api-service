@@ -39,6 +39,7 @@ import com.becoder.repository.FavouriteNoteRepository;
 import com.becoder.repository.FileRepository;
 import com.becoder.repository.NotesRepository;
 import com.becoder.service.NotesService;
+import com.becoder.util.CommonUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -192,15 +193,16 @@ public class NotesServiceImpl implements NotesService {
 	}
 
 	@Override
-	public FileDetails getFileDetails(Integer id) throws Throwable {
+	public FileDetails getFileDetails(Integer id) throws Exception {
 		FileDetails fileDetails = fileRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("File is not available"));
 		return fileDetails;
 	}
 
 	@Override
-	public NotesResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize) {
+	public NotesResponse getAllNotesByUser(Integer pageNo, Integer pageSize) {
 
+		Integer userId = CommonUtil.getLoggedInUser().getId();
 		if (userId == null || pageNo == null || pageSize == null) {
 			throw new IllegalArgumentException("User ID, Page Number, and Page Size must not be null.");
 		}
@@ -228,7 +230,7 @@ public class NotesServiceImpl implements NotesService {
 	}
 
 	@Override
-	public void softDeleteNotes(Integer id) throws Throwable {
+	public void softDeleteNotes(Integer id) throws Exception {
 		Notes notes = notesRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Notes id invalid ! Not Found"));
 
@@ -238,7 +240,7 @@ public class NotesServiceImpl implements NotesService {
 	}
 
 	@Override
-	public void restoreNotes(Integer id) throws Throwable {
+	public void restoreNotes(Integer id) throws Exception {
 		Notes notes = notesRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Notes id invalid ! Not Found"));
 
@@ -248,14 +250,15 @@ public class NotesServiceImpl implements NotesService {
 	}
 
 	@Override
-	public List<NotesDto> getUserRecycleBinNotes(Integer userId) {
+	public List<NotesDto> getUserRecycleBinNotes() {
+		Integer userId = CommonUtil.getLoggedInUser().getId();
 		List<Notes> recycleNotes = notesRepo.findByCreatedByAndIsDeletedTrue(userId);
 		List<NotesDto> notesDtoList = recycleNotes.stream().map(note -> mapper.map(note, NotesDto.class)).toList();
 		return notesDtoList;
 	}
 
 	@Override
-	public void hardDeleteNotes(Integer id) throws Throwable {
+	public void hardDeleteNotes(Integer id) throws Exception {
 		Notes notes = notesRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Notes not found"));
 
 		if (notes.getIsDeleted()) {
@@ -267,7 +270,8 @@ public class NotesServiceImpl implements NotesService {
 	}
 
 	@Override
-	public void emptyRecycleBin(Integer userId) {
+	public void emptyRecycleBin() {
+		Integer userId = CommonUtil.getLoggedInUser().getId();
 		List<Notes> recycleNotes = notesRepo.findByCreatedByAndIsDeletedTrue(userId);
 
 		if (!CollectionUtils.isEmpty(recycleNotes)) {
@@ -277,7 +281,7 @@ public class NotesServiceImpl implements NotesService {
 
 	@Override
 	public void favouriteNotes(Integer noteId) throws Exception {
-		int userId = 1;
+		Integer userId = CommonUtil.getLoggedInUser().getId();
 		Notes notes = notesRepo.findById(noteId)
 				.orElseThrow(() -> new ResourceNotFoundException("Notes Not found & Id invalid "));
 
@@ -296,7 +300,7 @@ public class NotesServiceImpl implements NotesService {
 
 	@Override
 	public List<FavouriteNoteDto> getUserFavouriteNotes() {
-		int userId = 1;
+		Integer userId = CommonUtil.getLoggedInUser().getId();
 		List<FavouriteNote> favouriteNotes = favouriteNoteRepo.findByUserId(userId);
 		List<FavouriteNoteDto> favouriteNoteList = favouriteNotes.stream()
 				.map(fn -> mapper.map(fn, FavouriteNoteDto.class)).toList();
@@ -313,7 +317,7 @@ public class NotesServiceImpl implements NotesService {
 
 		Notes saveCopyNotes = notesRepo.save(copyNote);
 		if (!ObjectUtils.isEmpty(saveCopyNotes)) {
-			return true	;
+			return true;
 		}
 		return false;
 	}

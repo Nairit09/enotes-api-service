@@ -68,7 +68,7 @@ public class CategoryController {
 			return ResponseEntity.noContent().build();
 		} else {
 
-			return new ResponseEntity<>(allCategory, HttpStatus.OK);
+			return CommonUtil.createBuildResponse(allCategory, HttpStatus.OK);
 		}
 
 	}

@@ -16,7 +16,7 @@ import com.becoder.config.security.CustomUserDetails;
 import com.becoder.dto.EmailRequest;
 import com.becoder.dto.LoginRequest;
 import com.becoder.dto.LoginResponse;
-import com.becoder.dto.UserDto;
+import com.becoder.dto.UserRequest;
 import com.becoder.entity.AccountStatus;
 import com.becoder.entity.Role;
 import com.becoder.entity.User;
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 	private JwtService jwtService;
 
 	@Override
-	public Boolean register(UserDto userDto, String url) throws Exception {
+	public Boolean register(UserRequest userDto, String url) throws Exception {
 
 		validation.userValidation(userDto);
 		User user = mapper.map(userDto, User.class);
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 		emailService.sendEmail(emailRequest);
 	}
 
-	private void setRole(UserDto userDto, User user) {
+	private void setRole(UserRequest userDto, User user) {
 		List<Integer> reqRoleId = userDto.getRoles().stream().map(r -> r.getId()).toList();
 		List<Role> roles = roleRepo.findAllById(reqRoleId);
 		user.setRoles(roles);
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
 			String token = jwtService.generateToken(customUserDetails.getUser());
 
 			LoginResponse loginResponse = LoginResponse.builder()
-					.user(mapper.map(customUserDetails.getUser(), UserDto.class)).token(token).build();
+					.user(mapper.map(customUserDetails.getUser(), UserRequest.class)).token(token).build();
 			return loginResponse;
 		}
 
