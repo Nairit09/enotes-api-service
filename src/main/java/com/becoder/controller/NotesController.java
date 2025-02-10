@@ -160,4 +160,13 @@ public class NotesController {
 		return CommonUtil.createErrorResponseMessage("Copy Failed ! Try Again", HttpStatus.INTERNAL_SERVER_ERROR);
 
 	}
+
+	@GetMapping("/search")
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity<?> searchNotes(@RequestParam(name = "key", defaultValue = "") String key,
+			@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+		NotesResponse notes = notesService.getNotesByUserSearch(pageNo, pageSize, key);
+		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+	}
 }
