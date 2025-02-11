@@ -5,7 +5,7 @@ spring:
   application:
     name: Enotes_API_Service
   datasource:
-    url: jdbc:mysql://localhost:3306/enotes_dev
+    url: jdbc:mysql://localhost:3306/enotes_uat
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: test
@@ -31,7 +31,7 @@ spring:
           starttls:
             enable: true
   profiles:
-    active: dev
+    active: uat
 file:
   upload:
     path: notes/
