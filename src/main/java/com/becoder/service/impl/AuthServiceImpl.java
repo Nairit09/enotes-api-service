@@ -28,6 +28,9 @@ import com.becoder.service.JwtService;
 import com.becoder.service.AuthService;
 import com.becoder.util.Validation;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -57,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public Boolean register(UserRequest userDto, String url) throws Exception {
-
+		log.info("AuthServiceImpl : register() : Execution Start");
 		validation.userValidation(userDto);
 		User user = mapper.map(userDto, User.class);
 
@@ -67,13 +70,15 @@ public class AuthServiceImpl implements AuthService {
 		user.setStatus(status);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		User saveUser = userRepo.save(user);
-		if (!ObjectUtils.isEmpty(saveUser)) {
-			// send email
-			emailSend(saveUser, url);
-			return true;
+		if (ObjectUtils.isEmpty(saveUser)) {
+			log.info("Error : {} ", "email send success");
+			return false;
 		}
-
-		return false;
+		// send email
+		emailSend(saveUser, url);
+		log.info("Message : {} ", "email send success");
+		log.info("AuthServiceImpl : register() : Execution End");
+		return true;
 	}
 
 	private void emailSend(User saveUser, String url) throws Exception {

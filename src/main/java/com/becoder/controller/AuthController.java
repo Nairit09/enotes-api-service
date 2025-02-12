@@ -16,7 +16,9 @@ import com.becoder.service.AuthService;
 import com.becoder.util.CommonUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -25,23 +27,31 @@ public class AuthController {
 	private AuthService authService;
 
 	@PostMapping("/")
-	public ResponseEntity<?> registerUser(@RequestBody UserRequest userDto, HttpServletRequest request) throws Exception {
+	public ResponseEntity<?> registerUser(@RequestBody UserRequest userDto, HttpServletRequest request)
+			throws Exception {
+		log.info("AuthController : registerUser() : Execution Start");
 		String url = CommonUtil.getUrl(request);
 		Boolean register = authService.register(userDto, url);
-		if (register) {
-			return CommonUtil.createBuildResponseMessage("Register success", HttpStatus.CREATED);
+		if (!register) {
+			log.info("Error : {}", "Register failed");
+			return CommonUtil.createErrorResponseMessage("Register failed", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return CommonUtil.createErrorResponseMessage("Register failed", HttpStatus.INTERNAL_SERVER_ERROR);
+		log.info("AuthController : registerUser() : Execution End");
+		return CommonUtil.createBuildResponseMessage("Register success", HttpStatus.CREATED);
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception {
+		log.info("AuthController : login() : Execution Start");
 
 		LoginResponse loginResponse = authService.login(loginRequest);
 
 		if (ObjectUtils.isEmpty(loginResponse)) {
-			return CommonUtil.createErrorResponseMessage("invalid credentials", HttpStatus.BAD_REQUEST);
+			log.info("Error : {}", "Invalid credentials");
+			return CommonUtil.createErrorResponseMessage("Invalid credentials", HttpStatus.BAD_REQUEST);
 		}
+
+		log.info("AuthController : login() : Execution End");
 		return CommonUtil.createBuildResponse(loginResponse, HttpStatus.OK);
 	}
 }

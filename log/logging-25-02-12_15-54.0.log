@@ -1,0 +1,5 @@
+2025-12-54 15:54:41.555 INFO  [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-54 15:54:41.562 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-12-54 15:54:41.564 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-12-54 15:54:41.708 INFO  [http-nio-8080-exec-1] c.becoder.controller.AuthController - AuthController : login() : Execution Start
+2025-12-54 15:54:42.267 INFO  [http-nio-8080-exec-1] c.becoder.controller.AuthController - AuthController : login() : Execution End
