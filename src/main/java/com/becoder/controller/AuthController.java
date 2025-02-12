@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.becoder.dto.LoginRequest;
 import com.becoder.dto.LoginResponse;
 import com.becoder.dto.UserRequest;
+import com.becoder.endpoint.AuthEndpoint;
 import com.becoder.service.AuthService;
 import com.becoder.util.CommonUtil;
 
@@ -20,8 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/auth")
-public class AuthController {
+public class AuthController implements AuthEndpoint {
 
 	@Autowired
 	private AuthService authService;
