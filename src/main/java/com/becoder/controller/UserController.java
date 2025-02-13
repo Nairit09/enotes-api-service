@@ -37,7 +37,7 @@ public class UserController implements UserEndpoint {
 	}
 
 	@Override
-	public ResponseEntity<?> changePassword(@RequestBody PasswordChngRequest passwordChngRequest) {
+	public ResponseEntity<?> changePassword(PasswordChngRequest passwordChngRequest) {
 
 		userService.changePassword(passwordChngRequest);
 		return CommonUtil.createBuildResponseMessage("Password change success", HttpStatus.OK);
