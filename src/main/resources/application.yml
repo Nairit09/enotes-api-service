@@ -1,24 +1,26 @@
-# Conversion to YAML from Properties formar report
-# Warnings:
-# - The yaml file had comments which are lost in the refactoring!
+
 spring:
   application:
     name: Enotes_API_Service
+
   datasource:
     url: jdbc:mysql://localhost:3306/enotes_dev
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: test
+
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: none
+
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -30,8 +32,16 @@ spring:
           auth: true
           starttls:
             enable: true
-  profiles:
-    active: dev
+
+springdoc:
+  swagger-ui:
+    operations-sorter: method
+    tags-sorter: alpha
+    path: /enotes-doc
+
+profiles:
+  active: dev
+
 file:
   upload:
     path: notes/
