@@ -8,9 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,13 +22,19 @@ import com.becoder.util.CommonUtil;
 @RestController
 public class NotesController implements NotesEndpoint {
 
+	private static final String DELETE_SUCCESS_MESSAGE = "Delete Success";
+
+	private final NotesService notesService;
+
 	@Autowired
-	private NotesService notesService;
+	public NotesController(NotesService notesService) {
+		this.notesService = notesService;
+	}
 
 	@Override
 	public ResponseEntity<?> saveNotes(String notes, MultipartFile file) throws Exception {
 
-		Boolean saveNotes = notesService.saveNotes(notes, file);
+		boolean saveNotes = notesService.saveNotes(notes, file);
 		if (saveNotes) {
 			return CommonUtil.createBuildResponseMessage("Notes saved success", HttpStatus.CREATED);
 		}
@@ -73,7 +76,7 @@ public class NotesController implements NotesEndpoint {
 	@Override
 	public ResponseEntity<?> deleteNotes(Integer id) throws Exception {
 		notesService.softDeleteNotes(id);
-		return CommonUtil.createBuildResponseMessage("Delete Success", HttpStatus.OK);
+		return CommonUtil.createBuildResponseMessage(DELETE_SUCCESS_MESSAGE, HttpStatus.OK);
 
 	}
 
@@ -97,14 +100,14 @@ public class NotesController implements NotesEndpoint {
 	@Override
 	public ResponseEntity<?> hardDeleteNotes(Integer id) throws Throwable {
 		notesService.hardDeleteNotes(id);
-		return CommonUtil.createBuildResponseMessage("Delete Success", HttpStatus.OK);
+		return CommonUtil.createBuildResponseMessage(DELETE_SUCCESS_MESSAGE, HttpStatus.OK);
 
 	}
 
 	@Override
 	public ResponseEntity<?> emptyUserRecycleBin() throws Exception {
 		notesService.emptyRecycleBin();
-		return CommonUtil.createBuildResponseMessage("Delete Success", HttpStatus.OK);
+		return CommonUtil.createBuildResponseMessage(DELETE_SUCCESS_MESSAGE, HttpStatus.OK);
 
 	}
 
@@ -134,7 +137,7 @@ public class NotesController implements NotesEndpoint {
 
 	@Override
 	public ResponseEntity<?> CopyNotes(Integer Id) throws Exception {
-		Boolean copyNotes = notesService.copyNotes(Id);
+		boolean copyNotes = notesService.copyNotes(Id);
 		if (copyNotes) {
 			return CommonUtil.createBuildResponseMessage("Copied success", HttpStatus.CREATED);
 		}

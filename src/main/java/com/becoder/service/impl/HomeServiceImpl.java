@@ -1,11 +1,8 @@
 package com.becoder.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.becoder.controller.HomeController;
 import com.becoder.entity.AccountStatus;
 import com.becoder.entity.User;
 import com.becoder.exception.ResourceNotFoundException;

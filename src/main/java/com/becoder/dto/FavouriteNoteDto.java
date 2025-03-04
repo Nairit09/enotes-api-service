@@ -2,7 +2,6 @@ package com.becoder.dto;
 
 import com.becoder.entity.Notes;
 
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

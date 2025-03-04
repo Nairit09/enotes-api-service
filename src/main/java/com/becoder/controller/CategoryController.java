@@ -8,9 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.becoder.dto.CategoryDto;
@@ -26,15 +23,19 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class CategoryController implements CategoryEndpoint {
 
-	@Autowired
-	private CategoryService categoryService;
+    private final CategoryService categoryService;
+
+    @Autowired
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
 	@Override
 	public ResponseEntity<?> saveCategory(CategoryDto category) {
 		category.setCreatedBy(1);
 		category.setCreatedOn(new Date());
 		category.setIsDeleted(false);
-		Boolean saveCategory = categoryService.saveCategory(category);
+		boolean saveCategory = categoryService.saveCategory(category);
 		if (saveCategory) {
 			return CommonUtil.createBuildResponseMessage("saved success", HttpStatus.CREATED);
 		} else {
@@ -85,7 +86,7 @@ public class CategoryController implements CategoryEndpoint {
 
 	@Override
 	public ResponseEntity<?> deleteCategoryById(Integer id) {
-		Boolean deleted = categoryService.deleteCategoryById(id);
+		boolean deleted = categoryService.deleteCategoryById(id);
 		if (deleted) {
 			return new ResponseEntity<>("Category deleted success", HttpStatus.OK);
 		}

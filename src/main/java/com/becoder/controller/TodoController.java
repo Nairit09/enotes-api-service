@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.becoder.dto.TodoDto;
@@ -19,13 +16,17 @@ import com.becoder.util.CommonUtil;
 @RestController
 public class TodoController implements TodoEndpoint {
 
+	private final TodoService todoService;
+
 	@Autowired
-	private TodoService todoService;
+	public TodoController(TodoService todoService) {
+		this.todoService = todoService;
+	}
 
 	@Override
 	public ResponseEntity<?> saveTodo(TodoDto todoDto) throws Exception {
 
-		Boolean saveTodo = todoService.saveTodo(todoDto);
+		boolean saveTodo = todoService.saveTodo(todoDto);
 
 		if (saveTodo) {
 			return CommonUtil.createBuildResponseMessage("Todo saved success", HttpStatus.CREATED);

@@ -12,8 +12,12 @@ import com.becoder.repository.UserRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+	private final UserRepository userRepo;
+
 	@Autowired
-	private UserRepository userRepo;
+	public UserDetailsServiceImpl(UserRepository userRepo) {
+		this.userRepo = userRepo;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -21,8 +21,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-	@Autowired
-	private UserDetailsService userDetailsService;
+	private final UserDetailsService userDetailsService;
+
+	public SecurityConfig(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
 
 	@Autowired
 	private JwtFilter jwtfilter;
@@ -37,7 +40,6 @@ public class SecurityConfig {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setUserDetailsService(userDetailsService);
 		provider.setPasswordEncoder(passwordEncoder());
-//		provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
 		return provider;
 	}
 
@@ -47,7 +49,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
 		http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(req -> req
 						.requestMatchers("/api/v1/home/**", "/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**")

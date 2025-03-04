@@ -23,9 +23,9 @@ import com.becoder.entity.Role;
 import com.becoder.entity.User;
 import com.becoder.repository.RoleRepository;
 import com.becoder.repository.UserRepository;
+import com.becoder.service.AuthService;
 import com.becoder.service.EmailService;
 import com.becoder.service.JwtService;
-import com.becoder.service.AuthService;
 import com.becoder.util.Validation;
 
 import lombok.extern.slf4j.Slf4j;

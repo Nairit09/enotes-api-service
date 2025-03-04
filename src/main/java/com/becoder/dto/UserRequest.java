@@ -2,10 +2,6 @@ package com.becoder.dto;
 
 import java.util.List;
 
-import com.becoder.entity.Role;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
