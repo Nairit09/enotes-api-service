@@ -1,6 +1,5 @@
 package com.becoder.config.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,13 +21,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
 	private final UserDetailsService userDetailsService;
+	private final JwtFilter jwtFilter;
 
-	public SecurityConfig(UserDetailsService userDetailsService) {
+	public SecurityConfig(UserDetailsService userDetailsService, JwtFilter jwtFilter) {
 		this.userDetailsService = userDetailsService;
+		this.jwtFilter = jwtFilter;
 	}
-
-	@Autowired
-	private JwtFilter jwtfilter;
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -49,14 +47,16 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
-		http.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(req -> req
-						.requestMatchers("/api/v1/home/**", "/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**")
-						.permitAll().anyRequest().authenticated())
+	public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter filter) throws Exception {
+		http.csrf(csrf -> csrf.disable()) // CSRF is disabled because we are using JWT authentication
+				.authorizeHttpRequests(
+						req -> req
+								.requestMatchers("/api/v1/home/**", "/api/v1/auth/**", "/swagger-ui/**",
+										"/v3/api-docs/**", "/enotes-doc/**", "/actuator/**")
+								.permitAll().anyRequest().authenticated())
 				.httpBasic(Customizer.withDefaults())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.addFilterBefore(jwtfilter, UsernamePasswordAuthenticationFilter.class);
+				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}

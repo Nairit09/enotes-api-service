@@ -3,7 +3,6 @@ package com.becoder.schedular;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +12,11 @@ import com.becoder.repository.NotesRepository;
 @Component
 public class NotesSchedular {
 
-	@Autowired
-	private NotesRepository notesRepo;
+	private final NotesRepository notesRepo;
+
+	public NotesSchedular(NotesRepository notesRepo) {
+		this.notesRepo = notesRepo;
+	}
 
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void deleteNotesSchedular() {

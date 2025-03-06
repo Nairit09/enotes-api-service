@@ -34,6 +34,7 @@ public class JwtServiceImpl implements JwtService {
 			SecretKey sk = keyGen.generateKey();
 			secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
 		} catch (Exception e) {
+			throw new IllegalStateException("Error generating secret key", e);
 		}
 	}
 

@@ -60,10 +60,7 @@ public class NotesServiceImpl implements NotesService {
 	@Autowired
 	private FavouriteNoteRepository favouriteNoteRepo;
 
-	@Autowired
-	private NotesRepository notesRepository;
-
-	@Value("${file.upload.path")
+	@Value("${file.upload.path}")
 	private String uploadpath;
 
 	@Autowired

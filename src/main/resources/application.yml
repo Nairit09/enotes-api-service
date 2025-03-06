@@ -38,10 +38,21 @@ springdoc:
     operations-sorter: method
     tags-sorter: alpha
     path: /enotes-doc
-
-profiles:
-  active: dev
+  api-docs:
+    path: /enotes-api-doc 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        exclude: beans
 
 file:
   upload:
     path: notes/
+---
+profiles:
+  active: dev
+
+
+
